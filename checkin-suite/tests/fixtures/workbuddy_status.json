@@ -1,0 +1,10 @@
+{
+  "code": 0,
+  "data": {
+    "active": true,
+    "today_checked_in": false,
+    "streak_days": 2,
+    "daily_credit": 10,
+    "today_credit": 0
+  }
+}

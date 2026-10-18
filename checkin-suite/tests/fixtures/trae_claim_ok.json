@@ -1,0 +1,8 @@
+{
+  "code": 0,
+  "message": "ok",
+  "data": {
+    "credits": 5,
+    "streak_days": 7
+  }
+}

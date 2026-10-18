@@ -1,0 +1,33 @@
+[package]
+name = "buddy-gasstation"
+version = "0.1.0"
+description = "Buddy 加油站 — WorkBuddy + TraeCode CN 签到与换号"
+authors = ["BenchForge"]
+edition = "2021"
+rust-version = "1.90"
+
+[lib]
+name = "buddy_gasstation_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Production credential vault (Memory + Windows CredMan; with_vault_dir required)
+credential-vault = { path = "../../../checkin-suite/crates/credential-vault" }
+# Checkin orchestrator + WB/Trae adapters (LiveHttp gated; default dry_run)
+checkin-core = { path = "../../../checkin-suite/crates/checkin-core" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
+# Fallback when app.path().app_data_dir() is unavailable at compile/runtime
+dirs = "6"
+# Switcher local DB (login_snapshot / switch_log); bundled = no system libsqlite
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true

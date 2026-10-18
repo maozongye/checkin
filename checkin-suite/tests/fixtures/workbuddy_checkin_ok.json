@@ -1,0 +1,10 @@
+{
+  "code": 0,
+  "message": "ok",
+  "data": {
+    "today_credit": 10,
+    "daily_credit": 10,
+    "streak_days": 3,
+    "today_checked_in": true
+  }
+}

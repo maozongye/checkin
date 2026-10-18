@@ -1,0 +1,23 @@
+:root {
+  /* 近黑后台 · 白/灰字 · 语义色 */
+  --bg: #0a0a0a;
+  --bg-elevated: #111111;
+  --bg-hover: #1a1a1a;
+  --border: #262626;
+  --border-strong: #3f3f46;
+
+  --fg: #fafafa;
+  --fg-muted: #a1a1aa;
+  --fg-subtle: #71717a;
+
+  --accent: #fafafa;
+  --accent-fg: #0a0a0a;
+
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #eab308;
+
+  --radius: 0.5rem;
+  --sidebar-width: 14rem;
+  --sidebar-collapsed: 3.5rem;
+}

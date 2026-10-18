@@ -1,0 +1,35 @@
+[package]
+name = "checkin-core"
+version = "0.1.0"
+edition = "2021"
+description = "WorkBuddy + Trae CN checkin adapter/orchestrator (dry_run default; LiveHttp gated)"
+license = "MIT"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+async-trait = "0.1"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+uuid = { version = "=1.11.0", features = ["v4"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+credential-vault = { path = "../credential-vault" }
+zeroize = { version = "1", features = ["derive"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+[dev-dependencies]
+credential-vault = { path = "../credential-vault" }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync", "time"] }
+tempfile = "3"
+wiremock = "=0.6.0"
+# rustc 1.85: keep url/idna off the 2.5.8+/icu2 path
+url = "=2.5.4"
+
+[lib]
+name = "checkin_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "import_desktop"
+path = "src/bin/import_desktop.rs"

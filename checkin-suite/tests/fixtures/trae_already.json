@@ -1,0 +1,7 @@
+{
+  "code": 9095,
+  "message": "already claimed today",
+  "data": {
+    "streak_days": 7
+  }
+}

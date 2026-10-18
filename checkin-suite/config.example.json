@@ -1,0 +1,44 @@
+{
+  "force_direct": true,
+  "workbuddy": {
+    "base_url": "https://copilot.tencent.com",
+    "alt_base_url": "https://www.codebuddy.cn",
+    "comment": "base=本机已验证默认；alt=候选备选；Global www.workbuddy.ai 不签到"
+  },
+  "trae": {
+    "ug_host": "https://api.trae.cn",
+    "oauth_host": "https://api.trae.com.cn",
+    "client_id": "ono9krqynydwx5",
+    "force_direct": true,
+    "comment": "client_id=默认候选仍配置化；deviceId 配对本机 telemetry.devDeviceId"
+  },
+  "desktop_paths": {
+    "wb_auth_relpath": "CodeBuddyExtension/Data/Public/auth/workbuddy-desktop.info",
+    "trae_storage_relpath": "Trae CN/User/globalStorage/storage.json",
+    "trae_auth_key_hint": "iCubeAuthInfo://icube.cloudide",
+    "trae_device_id_key": "telemetry.devDeviceId",
+    "comment": "本机 Windows 已验证默认（相对 LOCALAPPDATA / APPDATA）；仍可覆盖；勿提交 token"
+  },
+  "notify": {
+    "local_log": true,
+    "log_dir": "logs",
+    "wecom_webhook": "",
+    "pushplus_token": "",
+    "pushplus_topic": ""
+  },
+  "schedule": {
+    "timezone": "Asia/Shanghai",
+    "daily_at": "09:10",
+    "comment": "供 daemon / 文档参考；系统定时请用 install_cron.sh 或 install_schtasks.ps1"
+  },
+  "orchestrator": {
+    "concurrency": 3,
+    "jitter_ms": 500,
+    "comment": "多号同出口：concurrency≤3 + jitter"
+  },
+  "scope": {
+    "products": "workbuddy_desktop+trae_cn",
+    "orchestration": "daily-checkin-only",
+    "points": "credits_delta_v1_entitlement_optional"
+  }
+}

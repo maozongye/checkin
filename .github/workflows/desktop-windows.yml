@@ -1,0 +1,110 @@
+# Buddy 加油站 — Windows 安装包（CI/构建机产出，用户只下载）
+# 约束：禁止以用户本机 tauri build 作为主路径；NSIS 主交付 + MSI 附带；无代码签名
+# SmartScreen：apps/desktop/packaging/README-windows.md
+name: desktop-windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundles:
+        description: "Bundles to build"
+        required: true
+        default: "nsis,msi"
+        type: choice
+        options:
+          - nsis
+          - nsis,msi
+  push:
+    paths:
+      - "apps/desktop/**"
+      - ".github/workflows/desktop-windows.yml"
+    branches: [main, master]
+  pull_request:
+    paths:
+      - "apps/desktop/**"
+      - ".github/workflows/desktop-windows.yml"
+
+concurrency:
+  group: desktop-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: apps/desktop
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          # 有 package-lock.json 后启用：
+          # cache: npm
+          # cache-dependency-path: apps/desktop/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri -> target
+
+      - name: Guard src-tauri
+        shell: pwsh
+        run: |
+          if (-not (Test-Path src-tauri/tauri.conf.json)) {
+            Write-Error "src-tauri/tauri.conf.json missing"
+          }
+          if (-not (Test-Path src-tauri/icons/icon.ico)) {
+            Write-Error "src-tauri/icons/icon.ico missing (CI expects icons already in repo)"
+          }
+
+      - name: Install frontend deps
+        shell: pwsh
+        run: |
+          if (Test-Path package-lock.json) { npm ci } else { npm install }
+
+      - name: Resolve bundles
+        id: bundles
+        shell: bash
+        run: |
+          B="${{ github.event.inputs.bundles }}"
+          if [ -z "$B" ]; then B="nsis,msi"; fi
+          echo "value=$B" >> "$GITHUB_OUTPUT"
+
+      - name: Build Windows installer (unsigned)
+        run: npm run tauri build -- --bundles ${{ steps.bundles.outputs.value }}
+
+      - name: Stage artifacts for download
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build-out | Out-Null
+          $nsis = Get-ChildItem -Path src-tauri/target/release/bundle/nsis/*-setup.exe -ErrorAction SilentlyContinue
+          if (-not $nsis) { Write-Error "NSIS setup.exe not found" }
+          Copy-Item $nsis.FullName build-out/
+          $msi = Get-ChildItem -Path src-tauri/target/release/bundle/msi/*.msi -ErrorAction SilentlyContinue
+          if ($msi) { Copy-Item $msi.FullName build-out/ }
+          Get-ChildItem build-out | Format-Table Name, Length
+
+      - name: Upload Windows installers (downloadable)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BuddyGasStation-windows-${{ github.sha }}
+          path: apps/desktop/build-out/*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Download hint
+        shell: bash
+        run: |
+          echo "::notice::NSIS setup is in Actions artifact BuddyGasStation-windows-${{ github.sha }} (retain 14d). User downloads from Actions run — do not ask them to tauri build locally."

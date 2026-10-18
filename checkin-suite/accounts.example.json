@@ -1,0 +1,35 @@
+{
+  "accounts": [
+    {
+      "platform": "workbuddy",
+      "account_id": "wb-demo-001",
+      "uid": "10001",
+      "nickname": "示例Buddy用户",
+      "accessToken": "REPLACE_WITH_WORKBUDDY_ACCESS_TOKEN",
+      "refreshToken": "REPLACE_WITH_WORKBUDDY_REFRESH_TOKEN",
+      "domain": "codebuddy.cn",
+      "enabled": true
+    },
+    {
+      "platform": "workbuddy",
+      "account_id": "wb-demo-002",
+      "uid": "10002",
+      "nickname": "示例腾讯域用户",
+      "accessToken": "REPLACE_WITH_WORKBUDDY_ACCESS_TOKEN_2",
+      "refreshToken": "REPLACE_WITH_WORKBUDDY_REFRESH_TOKEN_2",
+      "domain": "copilot.tencent.com",
+      "enabled": false
+    },
+    {
+      "platform": "trae",
+      "account_id": "trae-demo-001",
+      "nickname": "示例Trae用户",
+      "accessToken": "REPLACE_WITH_TRAE_ACCESS_TOKEN",
+      "refreshToken": "REPLACE_WITH_TRAE_REFRESH_TOKEN",
+      "deviceId": "REPLACE_WITH_REAL_CLIENT_DEVICE_ID",
+      "clientId": "ono9krqynydwx5",
+      "device_type": "windows",
+      "enabled": true
+    }
+  ]
+}
